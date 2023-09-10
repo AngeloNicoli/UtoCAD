@@ -1,23 +1,36 @@
 from tkinter import *
+import ctypes
+from tkinter import ttk
+
+# Set zoom of Windows to 1 (Real Size Rendering)
+ctypes.windll.shcore.SetProcessDpiAwareness(2)
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------
 # Create Main Menu
+currentResolution = [1800,900]
+
 main = Tk()
-main.geometry('{}x{}'.format(1400, 750))
+main.geometry('{}x{}'.format(1800, 900))
 main.resizable(False,False)
 main.title("UtoCAD v0.1")
 
 def res1():
      main.geometry('{}x{}'.format(800,600))
-     print("i")
+     print("Resolution Changed")
 
 def res2():
      main.geometry('{}x{}'.format(1024, 700))
-     print("i")
+     print("Resolution Changed")
 
 def res3():
      main.geometry('{}x{}'.format(1400, 750))
-     print("i")
+     print("Resolution Changed")
+
+def res4():
+     main.geometry('{}x{}'.format(1400, 750))
+     print("Resolution Changed")
+
+mainFrame = []
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------
 # Create Menu bar
@@ -57,38 +70,62 @@ resmenu.add_command(label="Resolution: 1400x750",command=res3)
 # ------------------------------------------------------------------------------------------------------------------------------------------------------
 # Frame Creation
 
-# Upper Frame
-frame1 = Frame(main,bg="#3e3e42", width=800, height=60, highlightbackground="black",highlightthickness=1)
-frame1.grid(row=0,column=0, columnspan=3 , sticky="sewn")
+def CreateWorkWindow():
+     global main
+     # Upper Frame (Buttons)
+     mainFrame.append(Frame(main,bg="#3e3e42", width=currentResolution[0], height=currentResolution[1]*0.1, highlightbackground="#3e3e42",highlightthickness=1))
+     # Left Frame (Function Parameters, Colors)
+     frame2 = Frame(main,bg="#252526", width=currentResolution[0]*0.1, height=currentResolution[1]*0.8, highlightbackground="black",highlightthickness=1)
+     # Create Second Frame
+     frame3 = Frame(main,bg="#04252c", width=currentResolution[0]*0.8, height=currentResolution[1]*0.8, highlightbackground="black",highlightthickness=1)
+     frame4 = Frame(main,bg="#252526", width= currentResolution[0]*0.1, height=currentResolution[1]*0.8, highlightbackground="black",highlightthickness=1)
+     frame5 = Frame(main,bg="#3e3e42", width=currentResolution[0]*1, height=currentResolution[1]*0.1, highlightbackground="black",highlightthickness=1)
 
-# Create Thir Frame
-frame2 = Frame(main,bg="#252526", width=80, height=50, highlightbackground="black",highlightthickness=1)
-frame2.grid(row=1,column=0,rowspan=2, sticky="sewn")
+     frame6 = Frame(main,bg="#2d2d30", width=currentResolution[0]*1, height=currentResolution[0]*0.02, highlightbackground="black",highlightthickness=1)
 
-# Create Second Frame
-frame3 = Canvas(main,bg="#04252c", width=640, height=50, highlightbackground="black",highlightthickness=1)
-frame3.grid(row=1,column=1,sticky="sewn")
+     mainFrame[0].grid(row=0,column=0, columnspan=3,sticky="sewn")
+     frame2.grid(row=1,column=0,rowspan=2,sticky="sewn")
+     frame3.grid(row=1,column=1,sticky="sewn")
+     frame4.grid(row=1,column=2,rowspan=2,sticky="sewn")
+     frame5.grid(row=2,column=1,columnspan=1, sticky="ew")
+     frame6.grid(row=3,column=0,columnspan=3, sticky="sewn")
 
-frame4 = Frame(main,bg="#252526", width= 80, height=30, highlightbackground="black",highlightthickness=1)
-frame4.grid(row=1,column=2,rowspan=2,sticky="sewn")
+def CreateCanvas():
+     global main
+     a = Canvas(mainFrame[0],bg="white", width=currentResolution[0]*0.2, height=currentResolution[1]*0.2, highlightbackground="black",highlightthickness=1)
+     a.place(bordermode=INSIDE , relx =0.5-0.11, rely =0.5-0.11)
 
-frame5 = Frame(main,bg="#3e3e42", width=800, height=30, highlightbackground="black",highlightthickness=1)
-frame5.grid(row=2,column=1,columnspan=1, sticky="ew")
 
-frame6 = Frame(main,bg="#2d2d30", width=800, height=30, highlightbackground="black",highlightthickness=1)
-frame6.grid(row=3,column=0,columnspan=3, sticky="sewn")
+#CreateWorkWindow()
+#print(mainFrame[0])
+#CreateCanvas()
 
-# layout all of the main containers
+def Draw():
+   CreateWorkWindow()
+   print(mainFrame[0])
+   CreateCanvas()  
+
+
+# Layout all of the main containers
 main.grid_rowconfigure(0, weight=1)
 main.grid_rowconfigure(1, weight=50)
 main.grid_columnconfigure(1, weight=1)
 main.grid_rowconfigure(2, weight=0)
 
 
+clicked =StringVar()
+clicked.set("Monday")
+
+def clicked():
+     pass
+
+'''
 # ------------------------------------------------------------------------------------------------------------------------------------------------------
-#First Frame
+drop = OptionMenu(frame1,clicked,"Monday","Tuesday","Wednesday","Thursday","Friday")
+drop.place(bordermode=INSIDE ,height=50, width=100, relx =0.2)
+
 Bttn_Line = Button(frame1, text="Line", fg="brown",bg ='#A6ABAF',padx=20)
-Bttn_Line.grid(row=0, column=0,)
+Bttn_Line.place(bordermode=INSIDE ,height=80, width=100, relx =0.1)
 
 Bttn_Polyline= Button(frame1, text="Polyline", fg="brown",bg ='#A6ABAF', padx=20)
 Bttn_Polyline.grid(row=0, column=1)
@@ -124,7 +161,9 @@ Bttn_Polygon.grid(row=0, column=8)
 #blackbutton = Button(bottomframe, text="Black", fg="black")
 #blackbutton.grid(row=2, column=1,sticky="wesn")
 
+'''
 
+main.bind("a",lambda event:Draw())
 
-# MainLoop
+# MainLoop'''
 main.mainloop()
