@@ -1,6 +1,7 @@
 from tkinter import *
 import ctypes
 from tkinter import ttk
+import os
 
 # Set zoom of Windows to 1 (Real Size Rendering)
 ctypes.windll.shcore.SetProcessDpiAwareness(2)
@@ -10,9 +11,30 @@ ctypes.windll.shcore.SetProcessDpiAwareness(2)
 currentResolution = [1800,900]
 
 main = Tk()
-main.geometry('{}x{}'.format(1800, 900))
-main.resizable(False,False)
 main.title("UtoCAD v0.1")
+
+screen_width = main.winfo_screenwidth()
+screen_height = main.winfo_screenheight()
+
+main_width = int(screen_width)
+main_height= int(screen_height * 0.85)
+
+x_position = 0  # leftmost position
+y_position = 0  # uppermost position
+
+# print(type(main_height))
+print(main_height)
+
+# Set window size and position
+main.geometry(f"{main_width}x{main_height}+{x_position}+{y_position}")
+
+main.geometry('{}x{}'.format(screen_width, main_height))
+main.resizable(True,True)  # Put False to prevent resize
+
+
+print("Screen width:", screen_width)
+print("Screen height:", screen_height)
+
 
 def res1():
      main.geometry('{}x{}'.format(800,600))
@@ -92,9 +114,8 @@ def CreateWorkWindow():
 
 def CreateCanvas():
      global main
-     a = Canvas(mainFrame[0],bg="white", width=currentResolution[0]*0.2, height=currentResolution[1]*0.2, highlightbackground="black",highlightthickness=1)
-     a.place(bordermode=INSIDE , relx =0.5-0.11, rely =0.5-0.11)
-
+     #a = Canvas(mainFrame[0],bg="white", width=currentResolution[0]*0.2, height=currentResolution[1]*0.2, highlightbackground="black",highlightthickness=1)
+     #a.place(bordermode=INSIDE , relx =0.5-0.11, rely =0.5-0.11)
 
 #CreateWorkWindow()
 #print(mainFrame[0])
@@ -105,18 +126,22 @@ def Draw():
    print(mainFrame[0])
    CreateCanvas()  
 
-
 # Layout all of the main containers
 main.grid_rowconfigure(0, weight=1)
 main.grid_rowconfigure(1, weight=50)
 main.grid_columnconfigure(1, weight=1)
 main.grid_rowconfigure(2, weight=0)
 
-
 clicked =StringVar()
 clicked.set("Monday")
 
 def clicked():
+     pass
+
+def Destroy():
+     global mainFrame
+     mainFrame[0].destroy()
+     mainFrame = []
      pass
 
 '''
@@ -164,6 +189,7 @@ Bttn_Polygon.grid(row=0, column=8)
 '''
 
 main.bind("a",lambda event:Draw())
+main.bind("b",lambda event:Destroy())
 
 # MainLoop'''
 main.mainloop()
